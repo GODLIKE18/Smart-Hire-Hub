@@ -1130,6 +1130,22 @@ button:focus { outline: 2px solid var(--brand-2); outline-offset: 2px; }
 .job_post_title { font-size:48px; font-weight:700; letter-spacing:-1px; margin:0; }
 @media (max-width: 900px){ .job_post_title { font-size:40px; } }
 .job_post_subtitle { font-size:17px; color: rgba(15,23,42,.65); max-width:840px; margin:0 auto; }
+.job_post_header { position: relative; padding-top: 6px; }
+.job_post .container { position: relative; }
+.job_post:before { content:""; position:absolute; inset:0; background:
+  radial-gradient(600px 300px at 20% 0%, rgba(20,184,166,0.08), transparent 60%),
+  radial-gradient(600px 300px at 80% 0%, rgba(37,99,235,0.08), transparent 60%);
+  pointer-events:none; }
+.hero_badge { width:56px; height:56px; border-radius:999px; display:flex; align-items:center; justify-content:center; margin:0 auto; background: rgba(20,184,166,0.12); color: var(--brand); border:1px solid rgba(20,184,166,0.25); font-size:22px; }
+.job_stepper { margin-top:10px; display:flex; align-items:center; justify-content:center; gap:10px; color:#475569; }
+.job_stepper .divider { width:28px; height:1px; background:#e5e7eb; }
+.job_stepper .step { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; }
+.job_stepper .circle { width:22px; height:22px; border-radius:999px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; background:#fff; color:#0f172a; }
+.job_stats { display:flex; justify-content:center; align-items:center; gap:14px; margin:20px auto 0; flex-wrap:nowrap; }
+@media (max-width: 720px){ .job_stats { flex-wrap:wrap; } }
+.stat_card { background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:10px 12px; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:2px; align-items:flex-start; min-width:160px; }
+.stat_card .kpi { font-size:18px; font-weight:800; letter-spacing:-.3px; color:#0f172a; }
+.stat_card .kpi_sub { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; }
 .job_post .form_card{
   width: 100%;
   background: var(--surface, #fff);
@@ -1139,16 +1155,25 @@ button:focus { outline: 2px solid var(--brand-2); outline-offset: 2px; }
   padding: 40px 38px 46px;
   position:relative;
 }
+.job_post .form_card .form_layout { display:grid; grid-template-columns: 1fr 420px; gap:42px; }
+@media (max-width:1180px){ .job_post .form_card .form_layout { grid-template-columns: 1fr; } }
+.helper_text { font-size:11px; color:#64748b; margin-top:4px; }
+.job_preview { display:flex; flex-direction:column; gap:16px; }
+.job_preview_head h4 { font-size:18px; font-weight:700; margin:0; }
+.job_preview_head .muted { font-size:12px; color:#64748b; }
+.job_preview_card { border:1px solid #e2e8f0; background:#f8fafc; border-radius:14px; padding:18px 20px 22px; display:flex; flex-direction:column; gap:12px; box-shadow: var(--shadow-sm); }
+.job_preview_title { font-size:20px; font-weight:700; color:#0f172a; }
+.job_preview_meta { display:flex; gap:10px; flex-wrap:wrap; font-size:11px; font-weight:600; letter-spacing:.05em; }
+.job_preview_salary { font-size:14px; font-weight:600; color:#0f766e; }
+.job_preview_desc { font-size:13px; color:#475569; line-height:1.5; max-height:140px; overflow:hidden; }
 .job_post .container form {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 25px;
 }
-.job_post .container form .wrapper {
-  display: flex;
-  gap: 5vw;
-}
+.job_post .container form .wrapper { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 980px){ .job_post .container form .wrapper { grid-template-columns: 1fr; } }
 .job_post .container form .field{ flex:1; display:flex; flex-direction:column; gap:8px; }
 .job_post .container form .field label{ font-size:13px; color:#334155; font-weight:600; letter-spacing:.4px; text-transform:none; }
 .job_post .container form .wrapper input,
@@ -1163,6 +1188,11 @@ button:focus { outline: 2px solid var(--brand-2); outline-offset: 2px; }
   border-radius: 10px;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
+.job_post .container form .wrapper input,
+.job_post .container form .wrapper select,
+.job_post .container form input { height:46px; }
+.job_post .container form .wrapper select { appearance:none; background-image: linear-gradient(45deg, transparent 50%, #64748b 50%), linear-gradient(135deg, #64748b 50%, transparent 50%); background-position: calc(100% - 18px) calc(50% + 2px), calc(100% - 12px) calc(50% + 2px); background-size:6px 6px, 6px 6px; background-repeat:no-repeat; }
+.job_preview_card .company_chip { background:rgba(20,184,166,0.12); color:var(--brand); padding:4px 10px; border-radius:999px; border:1px solid rgba(20,184,166,0.25); font-size:11px; }
 .job_post .container form textarea { min-height:160px; line-height:1.5; }
 .job_post .container form input:focus,
 .job_post .container form .wrapper input:focus,
@@ -1178,6 +1208,15 @@ button:focus { outline: 2px solid var(--brand-2); outline-offset: 2px; }
   flex-direction: column;
   gap: 10px;
 }
+.job_post .container form .salary_wrapper .salary_toggle_group { display:inline-flex; gap:8px; }
+.toggle_btn { background:#fff; border:1px solid #e2e8f0; color:#334155; padding:8px 12px; font-weight:600; border-radius:10px; cursor:pointer; }
+.toggle_btn.active { background: rgba(20,184,166,0.12); color: var(--brand); border-color: rgba(20,184,166,0.35); }
+.salary_inputs { display:flex; flex-direction:column; gap:10px; }
+.range_group { display:flex; gap:14px; }
+.lpa_input { position:relative; display:flex; align-items:center; }
+.lpa_input input { width:100%; padding-right:52px; }
+.lpa_input .suffix { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:#f1f5f9; border:1px solid #e2e8f0; color:#0f172a; padding:4px 8px; border-radius:8px; font-size:12px; font-weight:700; }
+.helper_text.warn { color:#b91c1c; }
 .job_post .container form .salary_wrapper p { color:#be123c; font-size:13px; font-weight:500; letter-spacing:.3px; }
 .job_post .container form .salary_wrapper select {
   width: fit-content;
@@ -1276,6 +1315,20 @@ button:focus { outline: 2px solid var(--brand-2); outline-offset: 2px; }
 .job_actions .btn_primary:hover { transform:translateY(-2px); box-shadow: var(--shadow-md); }
 .job_actions .btn_danger { background:linear-gradient(135deg, #f43f5e 0%, #ec4899 100%); color:#fff; padding:8px 14px; font-size:13px; font-weight:600; border:none; border-radius:8px; box-shadow: var(--shadow-sm); }
 .job_actions .btn_danger:hover { transform:translateY(-2px); box-shadow: var(--shadow-md); }
+/* Empty state for My Jobs */
+.jobs_empty_wrapper { display:flex; align-items:center; justify-content:center; padding: 6px 0 10px; }
+.jobs_empty_card { text-align:center; max-width:560px; width:100%; background:#fff; border:1px solid #eef2f7; border-radius:16px; box-shadow: var(--shadow-sm); padding:32px 28px; }
+.jobs_empty_card .icon_ring { width:56px; height:56px; border-radius:999px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; background: rgba(20,184,166,0.12); color: var(--brand); border: 1px solid rgba(20,184,166,0.25); }
+.jobs_empty_card h2 { font-size:22px; font-weight:800; color:#0f172a; margin-bottom:6px; }
+.jobs_empty_card .muted_text { color:#64748b; font-size:14px; }
+
+/* Loading skeletons */
+.job_skeleton_grid { width:100%; display:grid; gap:24px; grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width:1200px){ .job_skeleton_grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width:700px){ .job_skeleton_grid { grid-template-columns: 1fr; } }
+.job_skeleton_card { background:#fff; border:1px solid #eef2f7; border-radius:12px; box-shadow: var(--shadow-sm); padding:22px; display:flex; flex-direction:column; gap:10px; }
+.job_skeleton_card .line { height:12px; background: linear-gradient(90deg, #f1f5f9, #e2e8f0, #f1f5f9); background-size: 200% 100%; animation: skeleton 1.2s ease-in-out infinite; border-radius:8px; }
+@keyframes skeleton { 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
 nav {
   background: linear-gradient(180deg, #0b1220, #0f172a);
   padding: 0 16px;
@@ -1303,6 +1356,8 @@ nav .menu {
   display: flex;
   gap: 18px;
   align-items: center;
+  flex-wrap: nowrap; /* keep items on one line */
+  white-space: nowrap; /* prevent anchor text wrapping */
 }
 nav .menu button {
   height: 40px;
@@ -1329,6 +1384,7 @@ nav .menu li a {
   position: relative;
   padding: 8px 6px;
   border-radius: 8px;
+  white-space: nowrap; /* ensure individual links never wrap */
 }
 nav .menu li a:hover {
   color: #14b8a6;

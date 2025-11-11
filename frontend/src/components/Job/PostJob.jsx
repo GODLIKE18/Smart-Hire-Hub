@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../main";
 import { JOB_CATEGORIES } from "../../constants/jobCategories";
+import { formatSalary } from "../../utils/salaryFormat";
 
 const PostJob = () => {
   const [title, setTitle] = useState("");
@@ -17,6 +18,7 @@ const PostJob = () => {
   const [salaryTo, setSalaryTo] = useState("");
   const [fixedSalary, setFixedSalary] = useState("");
   const [salaryType, setSalaryType] = useState("default");
+  const requiredFilled = title && companyName && category && country && city && description && (salaryType === 'Fixed Salary' ? fixedSalary : (salaryType === 'Ranged Salary' ? salaryFrom && salaryTo : false));
 
   const { isAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
@@ -94,10 +96,33 @@ const PostJob = () => {
       <div className="job_post page">
         <div className="container">
           <header className="job_post_header">
+            <div className="hero_badge">💼</div>
             <h1 className="job_post_title">Post a job</h1>
             <p className="job_post_subtitle">Share an opportunity in a clear, compelling way. Fill in the essentials below and publish instantly.</p>
+            <div className="job_stepper">
+              <div className="step"><span className="circle">1</span><span className="label">Basics</span></div>
+              <div className="divider" />
+              <div className="step"><span className="circle">2</span><span className="label">Comp & Location</span></div>
+              <div className="divider" />
+              <div className="step"><span className="circle">3</span><span className="label">Preview & Publish</span></div>
+            </div>
+            <div className="job_stats">
+              <div className="stat_card">
+                <p className="kpi">10</p>
+                <p className="kpi_sub">k candidates</p>
+              </div>
+              <div className="stat_card">
+                <p className="kpi">95</p>
+                <p className="kpi_sub">profile completeness</p>
+              </div>
+              <div className="stat_card">
+                <p className="kpi">2</p>
+                <p className="kpi_sub">min to publish</p>
+              </div>
+            </div>
           </header>
           <div className="form_card elevate fade-in-up">
+            <div className="form_layout">
             <form onSubmit={handleJobPost}>
               <div className="wrapper">
                 <div className="field">
@@ -108,6 +133,7 @@ const PostJob = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g., Senior Frontend Engineer"
                   />
+                  <span className="helper_text">Keep it concise and descriptive. Avoid abbreviations.</span>
                 </div>
                 <div className="field">
                   <label>Company name</label>
@@ -117,6 +143,7 @@ const PostJob = () => {
                     onChange={(e) => setCompanyName(e.target.value)}
                     placeholder="e.g., Acme Inc."
                   />
+                  <span className="helper_text">Your brand name as candidates will see it.</span>
                 </div>
                 <div className="field">
                   <label>Select Category</label>
@@ -159,45 +186,54 @@ const PostJob = () => {
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="e.g., Remote or On-site address"
                   />
+                  <span className="helper_text">Remote, Hybrid, or On-site with address details.</span>
                 </div>
               </div>
 
               <div className="salary_wrapper">
                 <label>Salary</label>
-                <select
-                  value={salaryType}
-                  onChange={(e) => setSalaryType(e.target.value)}
-                >
-                  <option value="default">Select Salary Type</option>
-                  <option value="Fixed Salary">Fixed Salary</option>
-                  <option value="Ranged Salary">Ranged Salary</option>
-                </select>
-                <div>
-                  {salaryType === "default" ? (
-                    <p>Select salary type to continue *</p>
-                  ) : salaryType === "Fixed Salary" ? (
-                    <input
-                      type="number"
-                      placeholder="Fixed salary (total amount)"
-                      value={fixedSalary}
-                      onChange={(e) => setFixedSalary(e.target.value)}
-                    />
-                  ) : (
-                    <div className="ranged_salary">
+                <div className="salary_toggle_group" role="group" aria-label="Select salary type">
+                  <button type="button" className={`toggle_btn ${salaryType === 'Fixed Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Fixed Salary')}>Fixed</button>
+                  <button type="button" className={`toggle_btn ${salaryType === 'Ranged Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Ranged Salary')}>Range</button>
+                </div>
+                <div className="salary_inputs">
+                  {salaryType === 'Fixed Salary' && (
+                    <div className="lpa_input">
                       <input
                         type="number"
-                        placeholder="Salary from"
-                        value={salaryFrom}
-                        onChange={(e) => setSalaryFrom(e.target.value)}
+                        min="0"
+                        placeholder="e.g., 12"
+                        value={fixedSalary}
+                        onChange={(e) => setFixedSalary(e.target.value)}
                       />
-                      <input
-                        type="number"
-                        placeholder="Salary to"
-                        value={salaryTo}
-                        onChange={(e) => setSalaryTo(e.target.value)}
-                      />
+                      <span className="suffix">LPA</span>
                     </div>
                   )}
+                  {salaryType === 'Ranged Salary' && (
+                    <div className="range_group">
+                      <div className="lpa_input">
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="From"
+                          value={salaryFrom}
+                          onChange={(e) => setSalaryFrom(e.target.value)}
+                        />
+                        <span className="suffix">LPA</span>
+                      </div>
+                      <div className="lpa_input">
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="To"
+                          value={salaryTo}
+                          onChange={(e) => setSalaryTo(e.target.value)}
+                        />
+                        <span className="suffix">LPA</span>
+                      </div>
+                    </div>
+                  )}
+                  {salaryType === 'default' && <p className="helper_text warn">Select salary type to continue *</p>}
                 </div>
               </div>
 
@@ -209,12 +245,32 @@ const PostJob = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe responsibilities, requirements, and benefits"
                 />
+                <span className="helper_text">Tip: Mention tech stack, experience level and perks.</span>
               </div>
 
               <div className="submit_row">
-                <button type="submit" className="job_post_btn">Post job</button>
+                <button type="submit" className="job_post_btn" disabled={!requiredFilled}>Post job</button>
               </div>
             </form>
+
+            {/* Live preview */}
+            <aside className="job_preview">
+              <div className="job_preview_head">
+                <h4>Preview</h4>
+                <p className="muted">This is how your job will appear to candidates.</p>
+              </div>
+              <div className="job_preview_card">
+                <div className="job_preview_title">{title || "Your Job Title"}</div>
+                <div className="job_preview_meta">
+                  {companyName && <span className="company_chip">{companyName}</span>}
+                  {(city || country) && <span className="muted">{city || country}</span>}
+                </div>
+                {category && <div className="pill mt-2" title={category}>{category}</div>}
+                <div className="job_preview_salary">{formatSalary({ fixedSalary: Number(fixedSalary), salaryFrom: Number(salaryFrom), salaryTo: Number(salaryTo) })}</div>
+                <div className="job_preview_desc">{description || "Write a concise overview of responsibilities, requirements and benefits."}</div>
+              </div>
+            </aside>
+            </div>
           </div>
         </div>
       </div>

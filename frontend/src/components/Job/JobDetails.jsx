@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../main";
 import { MapPin, DollarSign, Building2, Tag, CalendarDays, FileText } from "lucide-react";
+import { formatSalary } from "../../utils/salaryFormat";
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState({});
@@ -33,15 +34,7 @@ const JobDetails = () => {
     }
   }, [job?.jobPostedOn]);
 
-  const salaryText = useMemo(() => {
-    if (job?.fixedSalary) return `₹ ${Number(job.fixedSalary).toLocaleString()}`;
-    if (job?.salaryFrom || job?.salaryTo) {
-      const from = Number(job.salaryFrom || 0).toLocaleString();
-      const to = Number(job.salaryTo || 0).toLocaleString();
-      return `₹ ${from} - ₹ ${to}`;
-    }
-    return "Not disclosed";
-  }, [job]);
+  const salaryText = useMemo(() => formatSalary(job), [job]);
 
   return (
     <section className="jobDetail page">

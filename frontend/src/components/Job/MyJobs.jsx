@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { MapPin, DollarSign, FileText, Pencil, Trash2, Check } from "lucide-react";
+import { MapPin, DollarSign, FileText, Pencil, Trash2, Check, Briefcase, PlusCircle } from "lucide-react";
 import { Context } from "../../main";
 import { useNavigate } from "react-router-dom";
 import { JOB_CATEGORIES } from "../../constants/jobCategories";
 import Button from "../ui/Button";
+import { formatSalary } from "../../utils/salaryFormat";
 
 const MyJobs = () => {
   const [myJobs, setMyJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const { isAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
@@ -21,7 +23,8 @@ const MyJobs = () => {
       .then((res) => {
         setMyJobs(res.data.myJobs || []);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   }, [isAuthorized]);
 
   // Guard routes
@@ -76,19 +79,44 @@ const MyJobs = () => {
         <h1>Your posted jobs</h1>
   <p className="lead">Manage and refine the roles you have published. Switch to edit mode to adjust details.</p>
 
-        {myJobs.length === 0 && (
-          <div className="empty-state mt-6">You have not posted any jobs yet.</div>
+        {loading && (
+          <div className="job_skeleton_grid">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="job_skeleton_card">
+                <div className="line w-1/3" />
+                <div className="line w-2/3" />
+                <div className="line w-full" />
+                <div className="line w-4/5" />
+              </div>
+            ))}
+          </div>
         )}
 
-        <div className="job_admin_grid mt-4">
+        {!loading && myJobs.length === 0 && (
+          <div className="jobs_empty_wrapper">
+            <div className="jobs_empty_card elevate">
+              <div className="icon_ring">
+                <Briefcase size={36} />
+              </div>
+              <h2>No jobs posted yet</h2>
+              <p className="muted_text">Start by publishing your first role so candidates can apply.</p>
+              <Button
+                onClick={() => navigateTo("/job/post")}
+                size="lg"
+                className="rounded-full mt-2"
+                variant="primary"
+              >
+                <PlusCircle size={16} className="mr-2" /> Post a Job
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {!loading && myJobs.length > 0 && (<div className="job_admin_grid mt-4">
           {myJobs.map((job, _idx) => {
             const isEditing = editingId === job._id;
             const expired = Boolean(job.expired);
-            const salaryText = job.fixedSalary
-              ? `₹ ${Number(job.fixedSalary).toLocaleString()}`
-              : job.salaryFrom || job.salaryTo
-              ? `₹ ${Number(job.salaryFrom || 0).toLocaleString()} - ₹ ${Number(job.salaryTo || 0).toLocaleString()}`
-              : "Not disclosed";
+            const salaryText = formatSalary(job);
             return (
               <div key={job._id} className="job_admin_card">
                 {/* Header */}
@@ -304,7 +332,7 @@ const MyJobs = () => {
               </div>
             );
           })}
-        </div>
+        </div>)}
       </div>
     </section>
   );

@@ -8,6 +8,7 @@
     "start": "nodemon server.js",
     "dev": "nodemon server.js",
     "backfill:company": "node ./scripts/backfillCompanyName.js",
+    "seed:jobs": "node ./scripts/seedJobs.js",
     "lint": "eslint . --ext js --max-warnings 0",
     "test": "cross-env NODE_ENV=test vitest run"
   },
