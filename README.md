@@ -1,5 +1,8 @@
 # Smart Hire‑Hub
 
+![CI](https://github.com/GODLIKE18/Smart-Hire-Hub/actions/workflows/ci.yml/badge.svg) 
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Full‑stack job portal: React + Vite + Tailwind (frontend) and Node/Express + MongoDB (backend). Supports Employer and Job Seeker roles, job CRUD, applying with resume (PDF/images), JWT auth, and a simple profile for auto‑prefill.
 
 ## Quick start (Windows / PowerShell)

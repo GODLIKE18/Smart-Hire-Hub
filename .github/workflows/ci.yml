@@ -82,13 +82,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests (if test script and files exist)
-        shell: bash
-        run: |
-          if jq -e '.scripts.test' package.json > /dev/null && \
-             ls test/**/*test*.js >/dev/null 2>&1; then
-            echo "Running backend tests..."
-            npm test --silent
-          else
-            echo "No backend tests detected; skipping."
-          fi
+      - name: Run tests
+        env:
+          NODE_ENV: test
+        run: npm test --silent

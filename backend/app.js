@@ -39,7 +39,16 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicationRouter);
 app.use("/api/v1/profile", profileRouter);
-dbConnection();
+
+// Lightweight health endpoint for uptime checks and tests
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
+// Avoid opening DB connections during unit tests
+if (process.env.NODE_ENV !== "test") {
+  dbConnection();
+}
 
 app.use(errorMiddleware);
 export default app;

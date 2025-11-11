@@ -8,7 +8,8 @@
     "start": "nodemon server.js",
     "dev": "nodemon server.js",
     "backfill:company": "node ./scripts/backfillCompanyName.js",
-    "lint": "eslint . --ext js --max-warnings 0"
+    "lint": "eslint . --ext js --max-warnings 0",
+    "test": "cross-env NODE_ENV=test vitest run"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,9 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
-    "eslint": "^8.55.0"
+    "eslint": "^8.55.0",
+    "supertest": "^7.0.0",
+    "vitest": "^1.6.0",
+    "cross-env": "^7.0.3"
   }
 }
