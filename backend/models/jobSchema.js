@@ -9,7 +9,8 @@ const jobSchema = new mongoose.Schema({
     validate: {
       validator: function (v) {
         // Allow letters, numbers, spaces, dots, ampersands, hyphens and apostrophes
-        return /^[a-zA-Z0-9 .&'\-]+$/.test(v);
+        // Hyphen does not need escaping when placed at the end of the character class
+        return /^[a-zA-Z0-9 .&'-]+$/.test(v);
       },
       message: (props) => `${props.value} is not a valid company name!.`,
     },
