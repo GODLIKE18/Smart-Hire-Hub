@@ -8,7 +8,7 @@ import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import AuthLayout from "./AuthLayout";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,6 @@ const Register = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { isAuthorized, setIsAuthorized } = useContext(Context);
@@ -57,18 +56,18 @@ const Register = () => {
 
 
   return (
-    <>
-      <section className="authPage">
-        <div className="container">
-          <div className="header">
-            <img src="/JobZeelogo.png" alt="logo" />
-            <h3>Create a new account</h3>
+    <section className="auth-template signup-frame">
+      <div className="auth-tpl-left">
+        <div className="signup-card">
+          <div className="auth-form-head">
+            <h2>Smart Hire Hub</h2>
+            <p>Create your account to discover roles, apply confidently, or hire top talent.</p>
           </div>
-          <form onSubmit={handleRegister}>
-            <div className="inputTag">
-              <label>Register As</label>
-              <div>
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <form onSubmit={handleRegister} className="template-form">
+            <div className="tpl-field">
+              <label className="tpl-label">Register As</label>
+              <div className="tpl-input-wrap">
+                <select value={role} onChange={(e) => setRole(e.target.value)} className="tpl-input">
                   <option value="">Select Role</option>
                   <option value="Employer">Employer</option>
                   <option value="Job Seeker">Job Seeker</option>
@@ -76,68 +75,72 @@ const Register = () => {
                 <FaRegUser />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Name</label>
-              <div>
+            <div className="tpl-field">
+              <label className="tpl-label">Name</label>
+              <div className="tpl-input-wrap">
                 <input
                   type="text"
                   placeholder="Your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="tpl-input"
                 />
                 <FaPencilAlt />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Email Address</label>
-              <div>
+            <div className="tpl-field">
+              <label className="tpl-label">Email Address</label>
+              <div className="tpl-input-wrap">
                 <input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="tpl-input"
                 />
                 <MdOutlineMailOutline />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Phone Number</label>
-              <div>
+            <div className="tpl-field">
+              <label className="tpl-label">Phone Number</label>
+              <div className="tpl-input-wrap">
                 <input
                   type="number"
                   placeholder="e.g., 9876543210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  className="tpl-input"
                 />
                 <FaPhoneFlip />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Password</label>
-              <div style={{position:'relative'}}>
+            <div className="tpl-field">
+              <label className="tpl-label">Password</label>
+              <div className="tpl-input-wrap">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type="password"
                   placeholder="Create a strong password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="tpl-input"
                 />
-                <button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(p=>!p)} style={{position:'absolute', right:48, top:0, bottom:0, display:'flex', alignItems:'center', padding:'0 10px', background:'transparent', border:'none', color:'#64748b', cursor:'pointer'}}>
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
                 <RiLock2Fill />
               </div>
             </div>
-            <button type="submit" disabled={loading}>
-              {loading ? 'Creating…' : 'Signup'}
+            <button type="submit" disabled={loading} className="tpl-btn tpl-primary">
+              {loading ? 'Creating…' : 'Sign Up'}
             </button>
-            <Link to={"/login"}>Login</Link>
+            <p className="tpl-alt">Already have an account? <Link to="/login">Log in</Link></p>
           </form>
         </div>
-        <div className="banner">
-          <img src="/register.png" alt="login" />
-        </div>
-      </section>
-    </>
+      </div>
+      <div className="auth-tpl-right">
+        <img
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1920&auto=format&fit=crop"
+          alt="register"
+        />
+      </div>
+    </section>
   );
 };
 

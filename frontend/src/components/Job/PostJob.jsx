@@ -93,11 +93,10 @@ const PostJob = () => {
 
   return (
     <>
-      <div className="job_post page">
+      <div className="job_post page" role="main" aria-labelledby="post-job-heading">
         <div className="container">
           <header className="job_post_header">
-            <div className="hero_badge">💼</div>
-            <h1 className="job_post_title">Post a job</h1>
+            <h1 className="job_post_title" id="post-job-heading">Post a job</h1>
             <p className="job_post_subtitle">Share an opportunity in a clear, compelling way. Fill in the essentials below and publish instantly.</p>
             <div className="job_stepper">
               <div className="step"><span className="circle">1</span><span className="label">Basics</span></div>
@@ -121,9 +120,9 @@ const PostJob = () => {
               </div>
             </div>
           </header>
-          <div className="form_card elevate fade-in-up">
+          <div className="form_card elevate fade-in-up" aria-live="polite">
             <div className="form_layout">
-            <form onSubmit={handleJobPost}>
+            <form onSubmit={handleJobPost} role="form" aria-describedby="post-job-helper" autoComplete="off">
               <div className="wrapper">
                 <div className="field">
                   <label>Job title</label>
@@ -193,8 +192,8 @@ const PostJob = () => {
               <div className="salary_wrapper">
                 <label>Salary</label>
                 <div className="salary_toggle_group" role="group" aria-label="Select salary type">
-                  <button type="button" className={`toggle_btn ${salaryType === 'Fixed Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Fixed Salary')}>Fixed</button>
-                  <button type="button" className={`toggle_btn ${salaryType === 'Ranged Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Ranged Salary')}>Range</button>
+                  <button type="button" aria-pressed={salaryType === 'Fixed Salary'} className={`toggle_btn ${salaryType === 'Fixed Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Fixed Salary')}>Fixed</button>
+                  <button type="button" aria-pressed={salaryType === 'Ranged Salary'} className={`toggle_btn ${salaryType === 'Ranged Salary' ? 'active' : ''}`} onClick={() => setSalaryType('Ranged Salary')}>Range</button>
                 </div>
                 <div className="salary_inputs">
                   {salaryType === 'Fixed Salary' && (
@@ -249,8 +248,15 @@ const PostJob = () => {
               </div>
 
               <div className="submit_row">
-                <button type="submit" className="job_post_btn" disabled={!requiredFilled}>Post job</button>
+                <button type="submit" className="job_post_btn" disabled={!requiredFilled} aria-disabled={!requiredFilled}>
+                  Post job
+                </button>
               </div>
+              {!requiredFilled && (
+                <p className="disabled_hint" id="post-job-helper">
+                  Fill all required fields and choose a salary type to enable posting.
+                </p>
+              )}
             </form>
 
             {/* Live preview */}

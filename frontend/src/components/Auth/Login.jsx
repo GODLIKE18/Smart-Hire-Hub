@@ -3,17 +3,17 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { Link, Navigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
-import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
+import AuthLayout from "./AuthLayout"; // retained import though wrapper replaced for consistency (not used now)
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const { isAuthorized, setIsAuthorized } = useContext(Context);
 
@@ -33,12 +33,14 @@ const Login = () => {
           withCredentials: true,
         }
       );
+      console.log("Login response", data);
       toast.success(data.message);
       setEmail("");
       setPassword("");
       setRole("");
       setIsAuthorized(true);
     } catch (error) {
+      console.error("Login error", error?.response || error);
       toast.error(error?.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -50,18 +52,18 @@ const Login = () => {
   }
 
   return (
-    <>
-      <section className="authPage">
-        <div className="container">
-          <div className="header">
-            <img src="/JobZeelogo.png" alt="logo" />
-            <h3>Login to your account</h3>
+    <section className="auth-template login-frame">
+      <div className="auth-tpl-left">
+        <div className="login-card">
+          <div className="auth-form-head">
+            <h2>Smart Hire Hub</h2>
+            <p>Access your hiring dashboard to post roles and track applicants.</p>
           </div>
-          <form onSubmit={handleLogin}>
-            <div className="inputTag">
-              <label>Login As</label>
-              <div>
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <form onSubmit={handleLogin} className="template-form">
+            <div className="tpl-field">
+              <label className="tpl-label">Login As</label>
+              <div className="tpl-input-wrap">
+                <select value={role} onChange={(e) => setRole(e.target.value)} className="tpl-input">
                   <option value="">Select Role</option>
                   <option value="Employer">Employer</option>
                   <option value="Job Seeker">Job Seeker</option>
@@ -69,44 +71,52 @@ const Login = () => {
                 <FaRegUser />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Email Address</label>
-              <div>
+            <div className="tpl-field">
+              <label className="tpl-label">Username</label>
+              <div className="tpl-input-wrap">
                 <input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="tpl-input"
                 />
                 <MdOutlineMailOutline />
               </div>
             </div>
-            <div className="inputTag">
-              <label>Password</label>
-              <div style={{position:'relative'}}>
+            <div className="tpl-field">
+              <label className="tpl-label">Password</label>
+              <div className="tpl-input-wrap">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="tpl-input"
                 />
-                <button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(p=>!p)} style={{position:'absolute', right:48, top:0, bottom:0, display:'flex', alignItems:'center', padding:'0 10px', background:'transparent', border:'none', color:'#64748b', cursor:'pointer'}}>
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
                 <RiLock2Fill />
               </div>
             </div>
-            <button type="submit" disabled={loading}>
-              {loading ? 'Logging in…' : 'Login'}
+            <div className="tpl-row">
+              <label className="remember">
+                <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+                <span>Remember me</span>
+              </label>
+            </div>
+            <button type="submit" disabled={loading} className="tpl-btn tpl-primary">
+              {loading ? 'Logging in…' : 'Log In'}
             </button>
-            <Link to={"/register"}>Signup</Link>
+            <p className="tpl-alt">Don’t have an account? <Link to="/register">Sign up</Link></p>
           </form>
         </div>
-        <div className="banner">
-          <img src="/login.png" alt="login" />
-        </div>
-      </section>
-    </>
+      </div>
+      <div className="auth-tpl-right">
+        <img
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1920&auto=format&fit=crop"
+          alt="login"
+        />
+      </div>
+    </section>
   );
 };
 

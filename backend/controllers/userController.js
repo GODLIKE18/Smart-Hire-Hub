@@ -4,16 +4,18 @@ import ErrorHandler from "../middlewares/error.js";
 import { sendToken } from "../utils/jwtToken.js";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, phone, password, role } = req.body;
+  let { name, email, phone, password, role } = req.body;
   if (!name || !email || !phone || !password || !role) {
     return next(new ErrorHandler("Please fill full form!"));
   }
+  email = String(email).trim().toLowerCase();
+  role = String(role).trim();
   const isEmail = await User.findOne({ email });
   if (isEmail) {
     return next(new ErrorHandler("Email already registered!"));
   }
   const user = await User.create({
-    name,
+    name: String(name).trim(),
     email,
     phone,
     password,
@@ -23,24 +25,24 @@ export const register = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const login = catchAsyncErrors(async (req, res, next) => {
-  const { email, password, role } = req.body;
+  let { email, password, role } = req.body;
   if (!email || !password || !role) {
-    return next(new ErrorHandler("Please provide email ,password and role."));
+    return next(new ErrorHandler("Please provide email, password and role."));
   }
+  email = String(email).trim().toLowerCase();
+  role = String(role).trim();
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
-    return next(new ErrorHandler("Invalid Email Or Password.", 400));
+    return next(new ErrorHandler("Invalid email or password.", 400));
   }
   const isPasswordMatched = await user.comparePassword(password);
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Invalid Email Or Password.", 400));
+    return next(new ErrorHandler("Invalid email or password.", 400));
   }
-  if (user.role !== role) {
-    return next(
-      new ErrorHandler(`User with provided email and ${role} not found!`, 404)
-    );
+  if (String(user.role).trim() !== role) {
+    return next(new ErrorHandler("Incorrect role selected for this account.", 400));
   }
-  sendToken(user, 201, res, "User Logged In!");
+  sendToken(user, 200, res, "User Logged In!");
 });
 
 export const logout = catchAsyncErrors(async (req, res) => {
